@@ -1,6 +1,12 @@
 (require 'cl-lib)
 (defvar my-sexpr '(span ((id "my-id")) "some content"))
 
+(defvar *container-tags*
+  '("a" "article"  "aside" "b" "body" "canvas" "dd" "div" "dl" "dt" "em" "fieldset"
+    "footer" "form" "h1" "h2" "h3" "h4" "h5" "h6" "head" "header" "hgroup" "html"
+    "i" "iframe" "label" "li" "nav" "ol" "option" "pre" "section" "script" "span"
+    "strong" "style" "table" "textarea" "title" "ul"))
+
 (defun html-compile (sexp)
   "Convert ELisp s-exp to html string"
   (let ((html-string ""))
@@ -28,7 +34,7 @@
 			  (setq html-string (concat html-string "=\""))
 			  (setq html-string (concat html-string (cadr elem)))
 			  (setq html-string (concat html-string "\"")))
-			(if (eq content nil)
+			(if (and (not (member name *container-tags*)) (eq content nil))
 			    (setq html-string (concat html-string " />"))
 			  (progn
 			    (setq html-string (concat html-string ">"))
@@ -52,3 +58,6 @@
 (cl-assert (equal "<html><head><title>Welcome</title></head><body><p>Hello John</p></body></html>"
 		  (html-compile `(html (head (title "Welcome"))
 				       (body (p ,(concat "Hello " a-name)))))))
+(cl-assert (equal "<p />" (html-compile '(p))))
+(cl-assert (equal "<script></script>" (html-compile '(script))))
+(cl-assert (equal "<textarea></textarea>" (html-compile '(textarea))))
