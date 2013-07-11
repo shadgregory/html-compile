@@ -1,0 +1,17 @@
+(require 'cl-lib)
+(load-file "html-compile.el")
+
+(defvar a-name "John")
+(cl-assert (equal "<html><head><title>Welcome</title></head><body><p>Hello John</p></body></html>"
+		  (html-compile `(html (head (title "Welcome"))
+				       (body (p ,(concat "Hello " a-name)))))))
+(cl-assert (equal "<p />" (html-compile '(p))))
+(cl-assert (equal "<script></script>" (html-compile '(script))))
+(cl-assert (equal "<textarea></textarea>" (html-compile '(textarea))))
+(cl-assert (equal "<div></div>" (html-compile '(div))))
+(cl-assert (equal "<text />" (html-compile '(text))))
+(cl-assert (equal "<a></a>" (html-compile '(a))))
+(cl-assert (equal "<iframe></iframe>" (html-compile '(iframe))))
+(cl-assert (equal "<text>Lorem Ipsum</text>" (html-compile '(text "Lorem Ipsum"))))
+(cl-assert (equal "<body>foobar</body>" (html-compile '(body "foo" "bar"))))
+(cl-assert (equal "<body><p /><br /></body>" (html-compile '(body (p)(br)))))
