@@ -1,5 +1,4 @@
 (require 'cl-lib)
-(defvar my-sexpr '(span ((id "my-id")) "some content"))
 
 (defvar *container-tags*
   '("a" "article"  "aside" "b" "body" "canvas" "dd" "div" "dl" "dt" "em" "fieldset"
@@ -51,13 +50,3 @@
 		      (setq html-string (concat html-string ";"))))))
       (loop-sexp sexp))
     html-string))
-
-(html-compile '(span ((id "my-id")) (p "this is a paragraph")))
-(html-compile '(html (body (p "para a") nbsp (p "para b"))))
-(defvar a-name "John")
-(cl-assert (equal "<html><head><title>Welcome</title></head><body><p>Hello John</p></body></html>"
-		  (html-compile `(html (head (title "Welcome"))
-				       (body (p ,(concat "Hello " a-name)))))))
-(cl-assert (equal "<p />" (html-compile '(p))))
-(cl-assert (equal "<script></script>" (html-compile '(script))))
-(cl-assert (equal "<textarea></textarea>" (html-compile '(textarea))))
