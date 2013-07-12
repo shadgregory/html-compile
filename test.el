@@ -15,3 +15,7 @@
 (cl-assert (equal "<text>Lorem Ipsum</text>" (html-compile '(text "Lorem Ipsum"))))
 (cl-assert (equal "<body>foobar</body>" (html-compile '(body "foo" "bar"))))
 (cl-assert (equal "<body><p /><br /></body>" (html-compile '(body (p)(br)))))
+(cl-assert (equal "<div class=\"foo\"></div>" (html-compile '(div.foo))))
+(cl-assert (equal "<div class=\"a b\"></div>" (html-compile '(div.a.b))))
+(cl-assert (equal "<div class=\"a b\">div content</div>" (html-compile '(div.a.b "div content"))))
+(cl-assert (equal "<div class=\"a b c\"></div>" (html-compile '(div.a.b.c))))

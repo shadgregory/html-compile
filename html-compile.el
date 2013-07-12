@@ -18,7 +18,8 @@
 			    (content '()))
 			(if (and (listp (cdr x))
 				 (or (eq nil (cadr x))
-				     (and (listp (cadr x)) (listp (caadr x)))))
+				     (and (listp (cadr x)) (listp 
+							    (car (car (cdr x)))))))
 			    (progn
 			      (setq attrs (cadr x))
 			      (setq content (cddr x)))
@@ -26,7 +27,20 @@
 			    (setq attrs nil)
 			    (setq content (cdr x))))
 			(setq html-string (concat html-string "<"))
-			(setq html-string (concat html-string name))
+			;;class sugar
+			(if (> (length (split-string name "\\.")) 1)
+			    (progn 
+			      (let ((name-list (split-string name "\\.")))
+				(setq name (car name-list))
+				(setq html-string (concat html-string name))
+				(setq html-string (concat html-string " class=\""))
+				(if (car (cdr name-list))
+				    (setq html-string (concat html-string (car (cdr name-list)))))
+				(dolist (elem (cdr (cdr name-list)) html-string)
+				  (setq html-string (concat html-string " " elem)))
+				)
+			      (setq html-string (concat html-string "\"")))
+			  (setq html-string (concat html-string name)))
 			(dolist (elem attrs html-string)
 			  (setq html-string (concat html-string " "))
 			  (setq html-string (concat html-string (symbol-name (car elem))))
