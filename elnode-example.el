@@ -8,28 +8,36 @@
 
 (ad-activate 'elnode-http-return)
 
-(defun hello-world-handler (httpcon)
+(defun about-elnode-handler (httpcon)
    (elnode-http-start httpcon 200 '("Content-Type" . "text/html"))
    (elnode-http-return 
        httpcon 
-       '(html (body (h1 "Hello World") (p "A new day...")))))
+       '(html (head (title "Shad's Elnode Server")) 
+	      (body ((bgcolor "#e5e5e5")) 
+		    (p ((style "text-align:center;")) 
+		       (a ((href "https://github.com/nicferrier/elnode")) "Elnode") " rocks!")
+		    (p 
+		       (form ((style "text-align:center;") (action "name"))
+			     (label ((for "name")) "What is your name?") nbsp (input ((type "text") (name "name")))
+			     (input ((type "submit") (value "Greet")))))))))
 
 (defun hello-name-handler (httpcon)
-  (elnode-http-start httpcon 200 '("Content-Type" . "text/html"))
+  (elnode-http-start httpcon 200 '("] Content-Type" . "text/html"))
   (let ((a-name (elnode-http-param httpcon "name")))
     (if (eq a-name nil)
 	(setq a-name "John Thomas"))
     (elnode-http-return httpcon `(html 
-				  (body 
-				   (h1 
-				    ,(concat "Hello " a-name)))))))
+				  (body ((bgcolor "#e5e5e5")) 
+					(h1 ((style "text-align:center;"))
+					 ,(concat "Hello " a-name))
+					(p ((style "text-align:center;")) (a ((href "/"))"BACK")))))))
 
 (defun main-handler (httpcon)
   (elnode-hostpath-dispatcher
    httpcon
    `(("^.*//name" . hello-name-handler)
-     ("^.*//" . hello-world-handler))))
+     ("^.*//" . about-elnode-handler))))
 
-(elnode-start 'main-handler :port 8010 :host "localhost")
-;(elnode-stop 8010)
+(elnode-start 'main-handler :port 8010 :host "*")
+;; (elnode-stop 8010)
 
