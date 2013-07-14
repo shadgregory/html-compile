@@ -44,13 +44,14 @@
 				)
 			      (princ "\""))
 			  (princ name))
-
 			(dolist (elem attrs)
-			  (princ " " )
-			  (princ (symbol-name (car elem)))
-			  (princ "=\"" )
-			  (princ (cadr elem))
-			  (princ "\"" ))
+			  (if (not (eq nil (cadr elem)))
+			      (progn 
+				(princ " " )
+				(princ (symbol-name (car elem)))
+				(princ "=\"" )
+				(princ (cadr elem))
+				(princ "\"" ))))
 			(if (and (not (member name *container-tags*)) (eq content nil))
 			    (princ " />")
 			  (progn
